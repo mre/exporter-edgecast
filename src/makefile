@@ -11,8 +11,20 @@ $(GOMETALINTER):
 	gometalinter --install &> /dev/null
 
 # fire up gometalinter to concurrently run several static analysis tools at once
-# it's PHOY, as it doesn't create a file
+# it's PHOY, as it doesn't create a (target-)file
 .PHONY: lint
 lint: $(GOMETALINTER)
 	# recursevly run gometalinter on all files in this directory, skipping packages in vendor
 	gometalinter ./ ... --vendor
+
+# build everything in this directory and sub-directories
+# TODO: work this out
+.PHONY: build
+build:
+	go build
+
+# run main service package
+.PHONY: run
+run:
+	go run ./main/*.go
+
