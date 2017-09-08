@@ -19,7 +19,7 @@ func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
 
 	// Prometheus metrics settings
-	fieldKeys := []string{"method", "error"}
+	fieldKeys := []string{"method", "error"} // label names
 	requestCount := kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
 		Namespace: "my_group",
 		Subsystem: "edgecast_service",
@@ -39,19 +39,24 @@ func main() {
 		Help:      "The result of each count method.",
 	}, []string{}) // no fields here
 
+	// create the actual service
 	var svc EdgecastService
 	svc = edgecastService{}
-	svc = loggingMiddleware{logger, svc}
+	svc = loggingMiddleware{logger, svc} // attach logger to service
 	svc = instrumentingMiddleware{requestCount, requestLatency, countResult, svc}
 
+	// initiate server with service + endpoint
 	getDataHandler := httptransport.NewServer(
 		makeGetDataEndpoint(svc),
 		decodeGetDataRequest,
 		encodeResponse,
 	)
 
+	// connect handlers
 	http.Handle("/getdata", getDataHandler)
 	http.Handle("/metrics", promhttp.Handler())
+
+	// set up logger and start service on port 8080
 	logger.Log("msg", "HTTP", "addr", ":8080")
 	logger.Log("err", http.ListenAndServe(":8080", nil))
 }

@@ -8,9 +8,9 @@ import (
 )
 
 type instrumentingMiddleware struct {
-	requestCount   metrics.Counter
-	requestLatency metrics.Histogram
-	countResult    metrics.Histogram
+	requestCount   metrics.Counter   // positive only counting value
+	requestLatency metrics.Histogram // bucket sampling
+	countResult    metrics.Histogram // bucket sampling
 	next           EdgecastService
 }
 
@@ -21,6 +21,6 @@ func (mw instrumentingMiddleware) GetData(s string) (output string, err error) {
 		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
 	}(time.Now())
 
-	output, err = mw.next.GetData(s)
+	output, err = mw.next.GetData(s) // hand request to logged service
 	return
 }

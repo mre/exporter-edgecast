@@ -8,7 +8,7 @@ Migrating a monolithic PHP application to Microservices written in Go
 * 1.0.0
 
 ### make a call to serving microservice:
-try via: curl -XPOST -d'{"s":"jfk"}' localhost:8080/getdata
-or postman: 
-- URL: localhost:8080/getdata
-- Body (raw): {"s":"jfk"}
+- via: curl -XPOST -d'{"s":"jfk"}' localhost:8080/getdata
+- via postman: 
+    + URL: localhost:8080/getdata
+    + Body (raw): {"s":"jfk"}
