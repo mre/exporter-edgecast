@@ -11,7 +11,7 @@ import (
 func makeGetDataEndpoint(svc EdgecastService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(getDataRequest)
-		v, err := svc.GetData(req.S)
+		v, err := svc.GetData(req.AirportCode)
 		if err != nil {
 			return getDataResponse{v, err.Error()}, nil
 		}
@@ -32,10 +32,10 @@ func encodeResponse(_ context.Context, w http.ResponseWriter, response interface
 }
 
 type getDataRequest struct {
-	S string `json:"s"`
+	AirportCode string `json:"airportcode"`
 }
 
 type getDataResponse struct {
-	V   string `json:"v"`
-	Err string `json:"err, omitempty"`
+	Data string `json:"data"`
+	Err  string `json:"err, omitempty"`
 }
