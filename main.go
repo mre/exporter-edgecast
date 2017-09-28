@@ -21,19 +21,19 @@ func main() {
 	// Prometheus metrics settings
 	fieldKeys := []string{"method", "error"} // label names
 	requestCount := kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
-		Namespace: "my_group",
+		Namespace: "METRICS_SERVICES",
 		Subsystem: "edgecast_service",
 		Name:      "request_count",
 		Help:      "Number of requests received.",
 	}, fieldKeys)
 	requestLatency := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
-		Namespace: "my_group",
+		Namespace: "METRICS_SERVICES",
 		Subsystem: "edgecast_service",
 		Name:      "request_latency_microseconds",
 		Help:      "Total duration of requests in microseconds.",
 	}, fieldKeys)
 	countResult := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
-		Namespace: "my_group",
+		Namespace: "METRICS_SERVICES",
 		Subsystem: "edgecast_service",
 		Name:      "count_result",
 		Help:      "The result of each count method.",
@@ -54,7 +54,7 @@ func main() {
 
 	// connect handlers
 	http.Handle("/", getDataHandler)
-	http.Handle("/metrics", promhttp.Handler())
+	http.Handle("/metrics2", promhttp.Handler())
 
 	// set up logger and start service on port 8080
 	logger.Log("msg", "HTTP", "addr", ":8080")

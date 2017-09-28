@@ -18,3 +18,8 @@ Migrating a monolithic PHP application to Microservices written in Go
 - via postman: 
     + URL: localhost:8080/
     + Body (raw): {"s":"jfk"}
+
+# the res folder
+- contains useful information on files and packages
+- contains class/project/Entity-Relationship-Diagrams
+    + created with https://github.com/gmarik/go-erd
