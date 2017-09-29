@@ -3,9 +3,15 @@ package main
 import (
 	"errors"
 	"fmt"
+	ec "github.com/iwilltry42/edgecast"
 	"io/ioutil"
 	"net/http"
 )
+
+/*
+ * GLOBAL VARIABLES //TODO: maybe replace with environment-variables
+ */
+var EDGECAST_ENDPOINT = "https://api.edgecast.com/v2/realtimestats/customers/%s/media/%d/%s"
 
 // define business logic in an interface
 type EdgecastService interface {

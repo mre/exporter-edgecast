@@ -13,3 +13,4 @@ import:
   subpackages:
   - prometheus
   - prometheus/promhttp
+- package: github.com/iwilltry42/edgecast

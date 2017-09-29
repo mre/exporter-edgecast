@@ -1,5 +1,5 @@
-hash: 8d3e29a3fcf42cd9ff8697ddd06edcca429c6f5ce5c29ec7c5cbe8d373ef7648
-updated: 2017-09-28T11:58:58.460748493+02:00
+hash: ace21298fa89c27e3ec67bfe1325639a049af8a3961465b75255704168f1682d
+updated: 2017-09-29T10:43:03.717513362+02:00
 imports:
 - name: github.com/beorn7/perks
   version: 4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9
@@ -22,6 +22,8 @@ imports:
   version: 130e6b02ab059e7b717a096f397c5b60111cae74
   subpackages:
   - proto
+- name: github.com/iwilltry42/edgecast
+  version: d49b2471bf34caaa8cb38445996dc540a22fdd09
 - name: github.com/kr/logfmt
   version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
 - name: github.com/matttproud/golang_protobuf_extensions
