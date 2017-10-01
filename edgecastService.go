@@ -18,10 +18,12 @@ type EdgecastService interface {
 	GetData(string) (string, error)
 }
 
-type edgecastService struct{}
+type edgecastService struct {
+	ecs *ec.Edgecast
+}
 
 // Contacting the API to fetch the required data using the transmitted code
-func (edgecastService) GetData(code string) (string, error) {
+func (e edgecastService) GetData(code string) (string, error) {
 
 	// catch empty input
 	if code == "" {
@@ -29,6 +31,7 @@ func (edgecastService) GetData(code string) (string, error) {
 	}
 
 	// GET request to API-Endpoint
+	e.ecs.Bandwidth(2)
 	resp, err := http.Get(fmt.Sprintf("http://services.faa.gov/airport/status/%s?format=json", code))
 	if err != nil {
 		return "", ErrReq
