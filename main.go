@@ -54,7 +54,7 @@ func main() {
 	// initiate server with service + endpoint
 	getDataHandler := httptransport.NewServer(
 		makeGetDataEndpoint(svc),
-		decodeGetDataRequest,
+		nil,
 		encodeResponse,
 	)
 	metricsHandler := httptransport.NewServer() // TODO: fill

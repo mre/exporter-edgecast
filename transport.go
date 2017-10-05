@@ -23,15 +23,6 @@ func makeGetDataEndpoint(svc EdgecastService) endpoint.Endpoint {
 	}
 }
 
-// Encode/Decode request/response data in JSON format
-func decodeGetDataRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request getDataRequest
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		return nil, err
-	}
-	return request, nil
-}
-
 func encodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	return json.NewEncoder(w).Encode(response)
 }
