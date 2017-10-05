@@ -16,10 +16,15 @@ var EDGECAST_ENDPOINT = "https://api.edgecast.com/v2/realtimestats/customers/%s/
 // define business logic in an interface
 type EdgecastService interface {
 	GetData(string) (string, error)
+	GetBandwidth(int) (*ec.BandwidthData, error)
 }
 
 type edgecastService struct {
 	ecs *ec.Edgecast
+}
+
+func (e edgecastService) GetBandwidth(platform int) (*ec.BandwidthData, error) {
+	return e.ecs.Bandwidth(platform)
 }
 
 // Contacting the API to fetch the required data using the transmitted code
@@ -31,7 +36,6 @@ func (e edgecastService) GetData(code string) (string, error) {
 	}
 
 	// GET request to API-Endpoint
-	e.ecs.Bandwidth(2)
 	resp, err := http.Get(fmt.Sprintf("http://services.faa.gov/airport/status/%s?format=json", code))
 	if err != nil {
 		return "", ErrReq

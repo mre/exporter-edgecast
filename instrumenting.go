@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/metrics"
+	"github.com/iwilltry42/edgecast"
 )
 
 type instrumentingMiddleware struct {
@@ -22,5 +23,16 @@ func (mw instrumentingMiddleware) GetData(s string) (output string, err error) {
 	}(time.Now())
 
 	output, err = mw.next.GetData(s) // hand request to logged service
+	return
+}
+
+func (mw instrumentingMiddleware) GetBandwidth(platform int) (bandwidthData *edgecast.BandwidthData, err error) {
+	defer func(begin time.Time) {
+		lvs := []string{"method", "getbandwidth", "error", fmt.Sprint(err != nil)}
+		mw.requestCount.With(lvs...).Add(1)
+		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+	}(time.Now())
+
+	bandwidthData, err = mw.next.GetBandwidth(platform) // hand request to logged service
 	return
 }

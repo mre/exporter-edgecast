@@ -57,12 +57,16 @@ func main() {
 		decodeGetDataRequest,
 		encodeResponse,
 	)
+	metricsHandler := httptransport.NewServer(
+
+	)
 
 	// connect handlers
 	http.Handle("/", getDataHandler)
+	http.Handle("/metrics1", metricsHandler)
 	http.Handle("/metrics2", promhttp.Handler())
 
-	// set up logger and start service on port 8080
-	logger.Log("msg", "HTTP", "addr", ":8080")
-	logger.Log("err", http.ListenAndServe(":8080", nil))
+	// set up logger and start service on port 8090
+	logger.Log("msg", "HTTP", "addr", ":8090")
+	logger.Log("err", http.ListenAndServe(":8090", nil))
 }
