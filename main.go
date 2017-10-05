@@ -57,9 +57,7 @@ func main() {
 		decodeGetDataRequest,
 		encodeResponse,
 	)
-	metricsHandler := httptransport.NewServer(
-
-	)
+	metricsHandler := httptransport.NewServer() // TODO: fill
 
 	// connect handlers
 	http.Handle("/", getDataHandler)

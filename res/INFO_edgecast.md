@@ -22,7 +22,7 @@ Those are the available platforms:
         * see example fixtures [here](./fixtures/cachestatus.json) 
 - statuscode
     + ```[{"Connections": <int-value>, "StatusCode": "<http-statuscode>"}, ...]```
-        * see example fixtures [here](./fixtures/statuscode.json) 
+        * see example fixtures [here](./fixtures/statuscodes.json) 
 
 ## Request
 ### Default Headers:
@@ -31,5 +31,5 @@ Those are the available platforms:
 - Content-Type: application/json
 
 ## Storage
-### store to timeseries database using Graphite
+### store to timeseries database using Graphite (e.g. to InfluxDB)
 

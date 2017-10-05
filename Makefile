@@ -21,7 +21,7 @@ lint: $(GOMETALINTER)
 # TODO: work this out
 .PHONY: build
 build:
-	go build -o main
+	go build -o bin/main
 
 # run main service package
 .PHONY: run
