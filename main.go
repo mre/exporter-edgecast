@@ -27,20 +27,20 @@ func main() {
 	// Prometheus metrics settings
 	fieldKeys := []string{"method", "error"} // label names
 	requestCount := kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
-		Namespace: "METRICS_SERVICES",
-		Subsystem: "edgecast_service",
+		Namespace: "EDGECAST_SERVICE",
+		Subsystem: "service_metrics",
 		Name:      "request_count",
 		Help:      "Number of requests received.",
 	}, fieldKeys)
 	requestLatency := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
-		Namespace: "METRICS_SERVICES",
-		Subsystem: "edgecast_service",
+		Namespace: "EDGECAST_SERVICE",
+		Subsystem: "service_metrics",
 		Name:      "request_latency_microseconds",
 		Help:      "Total duration of requests in microseconds.",
 	}, fieldKeys)
 	countResult := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
-		Namespace: "METRICS_SERVICES",
-		Subsystem: "edgecast_service",
+		Namespace: "EDGECAST_SERVICE",
+		Subsystem: "service_metrics",
 		Name:      "count_result",
 		Help:      "The result of each count method.",
 	}, []string{}) // no fields here

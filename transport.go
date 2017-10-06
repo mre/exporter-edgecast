@@ -24,12 +24,8 @@ func makeGetDataEndpoint(svc EdgecastService) endpoint.Endpoint {
 }
 
 func encodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+	// TODO: re-format to Prometheus format
 	return json.NewEncoder(w).Encode(response)
-}
-
-// define request and response structure
-type getDataRequest struct {
-	AirportCode string `json:"airportcode"`
 }
 
 type getDataResponse struct {
