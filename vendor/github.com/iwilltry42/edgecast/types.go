@@ -14,7 +14,7 @@ type ConnectionData struct {
 	Platform    int
 }
 
-// CacheStatusData represents all fields returned from
+// CacheStatusData represends all fields returned from
 // a request to the /cachestatus endpoint
 type CacheStatusData []struct {
 	CacheStatus string `json:"CacheStatus"`
