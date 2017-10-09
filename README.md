@@ -8,10 +8,11 @@ Migrating a monolithic PHP application to Microservices written in Go
 * 1.0.0
 
 ### Package Management
-* This project uses glide as package manager
-* versions are tracked in glide.lock
-* glide settings are included in glide.yaml
-* get glide here: https://glide.sh/
+* This project uses ~~glide~~ **dep** as package manager
+* versions are tracked in ~~glide.lock~~ Gopkg.lock
+* glide settings are included in ~~glide.yaml~~ Gopkg.toml
+* ~~get glide here: https://glide.sh/~~
+* get dep here: https://github.com/golang/dep
 
 ### make a call to serving microservice:
 - via: curl -XPOST -d'{"s":"jfk"}' localhost:8080/
