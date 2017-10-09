@@ -3,7 +3,9 @@ package main
 import (
 	"errors"
 	"fmt"
+	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	ec "github.com/iwilltry42/edgecast"
+	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	"io/ioutil"
 	"net/http"
 )
@@ -20,7 +22,27 @@ type EdgecastService interface {
 }
 
 type edgecastService struct {
-	ecs *ec.Edgecast
+	ecs            *ec.Edgecast
+	bandwidhtGauge *kitprometheus.Gauge
+}
+
+func NewEdgecastService() *edgecastService {
+	e := &edgecastService{}
+	e.ecs = ec.NewEdgecastClient("testID", "testToken")
+	/*
+	 * Settings for logging the fetched metrics with Prometheus
+	 */
+	// Prometheus Metrics Settings for Edgecast Metrics
+	// bandwidth
+	fieldKeys := []string{"platform"}
+	e.bandwidhtGauge = kitprometheus.NewGaugeFrom(stdprometheus.GaugeOpts{
+		Namespace: "EDGECAST_METRICS",
+		Subsystem: "api_metrics",
+		Name:      "bandwidth",
+	}, fieldKeys)
+	e.bandwidhtGauge.Set(0) // initial value
+
+	return e
 }
 
 func (e edgecastService) GetBandwidth(platform int) (*ec.BandwidthData, error) {

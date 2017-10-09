@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	ec "github.com/iwilltry42/edgecast"
-
 	// Prometheus for logging/metrics
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -20,11 +18,7 @@ import (
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
 
-	// TODO: replace with environmentvariables
-	edgecast_account_ID := "testID"
-	edgecast_token := "testToken"
-
-	// Prometheus metrics settings
+	// Prometheus metrics settings for this service
 	fieldKeys := []string{"method", "error"} // label names
 	requestCount := kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
 		Namespace: "EDGECAST_SERVICE",
@@ -47,7 +41,7 @@ func main() {
 
 	// create the actual service
 	var svc EdgecastService
-	svc = edgecastService{ec.NewEdgecastClient(edgecast_account_ID, edgecast_token)}
+	svc = NewEdgecastService()
 	svc = loggingMiddleware{logger, svc} // attach logger to service
 	svc = instrumentingMiddleware{requestCount, requestLatency, countResult, svc}
 
@@ -57,11 +51,9 @@ func main() {
 		nil,
 		encodeResponse,
 	)
-	metricsHandler := httptransport.NewServer() // TODO: fill
 
 	// connect handlers
 	http.Handle("/", getDataHandler)
-	http.Handle("/metrics1", metricsHandler)
 	http.Handle("/metrics2", promhttp.Handler())
 
 	// set up logger and start service on port 8090
