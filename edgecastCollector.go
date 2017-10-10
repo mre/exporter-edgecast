@@ -6,17 +6,33 @@ import (
 
 type edgecastCollector struct{}
 
+const (
+	NAMESPACE = "Edgecast"
+)
+
 var (
-	Namespace = "Edgecast"
-	testDesc  = prometheus.NewDesc(
-		prometheus.BuildFQName(Namespace, "api_metrics", "bandwidth"), "BandwidthData", []string{"platform"}, nil,
+	variableLabels = []string{"platform"}
+	bandwidth      = prometheus.NewDesc(
+		prometheus.BuildFQName(NAMESPACE, "metrics", "bandwidth"), "Bandwidth (Mbps).", variableLabels, nil,
+	)
+	cachestatus = prometheus.NewDesc(
+		prometheus.BuildFQName(NAMESPACE, "metrics", "cachestatus"), "Connections per Cachestatus.", variableLabels, nil,
+	)
+	connections = prometheus.NewDesc(
+		prometheus.BuildFQName(NAMESPACE, "metrics", "connections"), "Number of Connections.", variableLabels, nil,
+	)
+	statuscodes = prometheus.NewDesc(
+		prometheus.BuildFQName(NAMESPACE, "metrics", "statuscodes"), "Connections per Statuscode.", variableLabels, nil,
 	)
 )
 
 func (ec edgecastCollector) Describe(ch chan<- *prometheus.Desc) {
-	ch <- testDesc
+	ch <- bandwidth
+	ch <- cachestatus
+	ch <- connections
+	ch <- statuscodes
 }
 
 func (ec edgecastCollector) Collect(ch chan<- prometheus.Metric) {
-	ch <- prometheus.MustNewConstMetric(testDesc, prometheus.GaugeValue, 2, []string{"platform"}...)
+	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, 2, []string{"platform"}...)
 }
