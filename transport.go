@@ -14,8 +14,8 @@ import (
 func makeGetDataEndpoint(svc EdgecastService) endpoint.Endpoint {
 	// empty interface{} has no methods and so this function accepts any value => will be converted to type interface{}
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-		req := request.(getDataRequest)
-		v, err := svc.GetData(req.AirportCode)
+		//req := request
+		v, err := svc.GetData("test")
 		if err != nil {
 			return getDataResponse{v, err.Error()}, nil
 		}

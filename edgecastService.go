@@ -6,6 +6,7 @@ import (
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	ec "github.com/iwilltry42/edgecast"
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
+	//"github.com/prometheus/client_golang/prometheus/promhttp"
 	"io/ioutil"
 	"net/http"
 )
@@ -26,7 +27,9 @@ type edgecastService struct {
 	bandwidhtGauge *kitprometheus.Gauge
 }
 
+// TODO: update to fit to new collector
 func NewEdgecastService() *edgecastService {
+	stdprometheus.Register(edgecastCollector{})
 	e := &edgecastService{}
 	e.ecs = ec.NewEdgecastClient("testID", "testToken")
 	/*
@@ -39,8 +42,11 @@ func NewEdgecastService() *edgecastService {
 		Namespace: "EDGECAST_METRICS",
 		Subsystem: "api_metrics",
 		Name:      "bandwidth",
+		Help:      "bandwidth metrics fetched from Edgecast API",
 	}, fieldKeys)
-	e.bandwidhtGauge.Set(0) // initial value
+	lvs := []string{"platform", "http_small"}
+	e.bandwidhtGauge.With(lvs...).Set(1) // initial value
+	println("test:", e.bandwidhtGauge)
 
 	return e
 }

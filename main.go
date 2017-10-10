@@ -12,7 +12,7 @@ import (
 	// go-kit
 	"github.com/go-kit/kit/log"
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
-	httptransport "github.com/go-kit/kit/transport/http"
+	//httptransport "github.com/go-kit/kit/transport/http"
 )
 
 func main() {
@@ -46,15 +46,15 @@ func main() {
 	svc = instrumentingMiddleware{requestCount, requestLatency, countResult, svc}
 
 	// initiate server with service + endpoint
-	getDataHandler := httptransport.NewServer(
+	/*getDataHandler := httptransport.NewServer(
 		makeGetDataEndpoint(svc),
 		nil,
 		encodeResponse,
-	)
+	)*/
 
 	// connect handlers
-	http.Handle("/", getDataHandler)
-	http.Handle("/metrics2", promhttp.Handler())
+	//http.Handle("/service", )
+	http.Handle("/metrics", promhttp.Handler())
 
 	// set up logger and start service on port 8090
 	logger.Log("msg", "HTTP", "addr", ":8090")
