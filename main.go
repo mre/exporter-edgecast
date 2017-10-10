@@ -20,29 +20,23 @@ func main() {
 	// Prometheus metrics settings for this service
 	fieldKeys := []string{"method", "error"} // label names
 	requestCount := kitprometheus.NewCounterFrom(prometheus.CounterOpts{
-		Namespace: "EDGECAST_SERVICE",
+		Namespace: "EDGECAST",
 		Subsystem: "service_metrics",
 		Name:      "request_count",
 		Help:      "Number of requests received.",
 	}, fieldKeys)
 	requestLatency := kitprometheus.NewSummaryFrom(prometheus.SummaryOpts{
-		Namespace: "EDGECAST_SERVICE",
+		Namespace: "EDGECAST",
 		Subsystem: "service_metrics",
 		Name:      "request_latency_microseconds",
 		Help:      "Total duration of requests in microseconds.",
 	}, fieldKeys)
-	countResult := kitprometheus.NewSummaryFrom(prometheus.SummaryOpts{
-		Namespace: "EDGECAST_SERVICE",
-		Subsystem: "service_metrics",
-		Name:      "count_result",
-		Help:      "The result of each count method.",
-	}, []string{}) // no fields here
 
 	// create the actual service
 	var svc EdgecastService
 	svc = NewEdgecastService()
 	svc = loggingMiddleware{logger, svc} // attach logger to service
-	svc = instrumentingMiddleware{requestCount, requestLatency, countResult, svc}
+	svc = instrumentingMiddleware{requestCount, requestLatency, svc}
 
 	// connect handlers
 	http.Handle("/metrics", promhttp.Handler())

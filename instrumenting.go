@@ -11,7 +11,6 @@ import (
 type instrumentingMiddleware struct {
 	requestCount   metrics.Counter   // positive only counting value
 	requestLatency metrics.Histogram // bucket sampling
-	countResult    metrics.Histogram // bucket sampling
 	next           EdgecastService
 }
 
