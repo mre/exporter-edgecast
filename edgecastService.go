@@ -29,7 +29,7 @@ type edgecastService struct {
 
 // TODO: update to fit to new collector
 func NewEdgecastService() *edgecastService {
-	stdprometheus.Register(edgecastCollector{})
+	stdprometheus.Register(collector{})
 	e := &edgecastService{}
 	e.ecs = ec.NewEdgecastClient("testID", "testToken")
 	/*
