@@ -14,7 +14,7 @@ type EdgecastInterface interface {
 }
 
 type edgecastCollector struct {
-	ec edgecast.Edgecast
+	ec EdgecastInterface
 }
 
 const (
@@ -39,7 +39,7 @@ var (
 	)
 )
 
-func NewEdgecastCollector(edgecast2 *edgecast.Edgecast) *edgecastCollector {
+func NewEdgecastCollector(edgecast2 *EdgecastInterface) *edgecastCollector {
 	return &edgecastCollector{ec: *edgecast2}
 }
 
@@ -60,7 +60,7 @@ func (col edgecastCollector) Describe(ch chan<- *prometheus.Desc) {
  */
 func (col edgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, 1, []string{"http_large"}...)
-	ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, 2, variableLabels...)
-	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, 3, variableLabels...)
-	ch <- prometheus.MustNewConstMetric(statuscodes, prometheus.GaugeValue, 4, variableLabels...)
+	ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, 2, []string{"http_large"}...)
+	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, 3, []string{"http_large"}...)
+	ch <- prometheus.MustNewConstMetric(statuscodes, prometheus.GaugeValue, 4, []string{"http_large"}...)
 }
