@@ -31,8 +31,8 @@ var (
 	)
 )
 
-func NewEdgecastCollector(accountID, token string) *edgecastCollector {
-	return &edgecastCollector{ec: *edgecast.NewEdgecastClient(accountID, token)}
+func NewEdgecastCollector(edgecast2 *edgecast.Edgecast) *edgecastCollector {
+	return &edgecastCollector{ec: *edgecast2}
 }
 
 /*
