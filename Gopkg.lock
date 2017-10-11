@@ -35,7 +35,7 @@
   branch = "master"
   name = "github.com/iwilltry42/edgecast"
   packages = ["."]
-  revision = "c3eb846f87ffd5eed0da844ac2a89cc24a890833"
+  revision = "14f04cca549b311942c182e573ba82c7d46567fc"
 
 [[projects]]
   branch = "master"

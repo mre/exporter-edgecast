@@ -48,7 +48,7 @@ const (
 )
 
 // interface to be used for logging and instrumenting middleware
-type edgecast interface {
+type EdgecastInterface interface {
 	Bandwidth(int) (*BandwidthData, error)
 	Connections(int) (*ConnectionData, error)
 	CacheStatus(int) (*CacheStatusData, error)
