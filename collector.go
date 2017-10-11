@@ -12,7 +12,9 @@ const (
 
 var (
 	variableLabels = []string{"platform"}
-	bandwidth      = prometheus.NewDesc(
+
+	// Prepared Description of all fetchable metrics
+	bandwidth = prometheus.NewDesc(
 		prometheus.BuildFQName(NAMESPACE, "metrics", "bandwidth"), "Bandwidth (Mbps).", variableLabels, nil,
 	)
 	cachestatus = prometheus.NewDesc(
@@ -42,7 +44,7 @@ func (ec collector) Describe(ch chan<- *prometheus.Desc) {
  * implements function of interface prometheus.Collector
  */
 func (ec collector) Collect(ch chan<- prometheus.Metric) {
-	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, 1, variableLabels...)
+	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, 1, []string{"http_large"}...)
 	ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, 2, variableLabels...)
 	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, 3, variableLabels...)
 	ch <- prometheus.MustNewConstMetric(statuscodes, prometheus.GaugeValue, 4, variableLabels...)

@@ -20,13 +20,11 @@ const (
 
 // define business logic in an interface
 type EdgecastService interface {
-	GetData(string) (string, error)
 	GetBandwidth(int) (*ec.BandwidthData, error)
 }
 
 type edgecastService struct {
-	ecs            *ec.Edgecast
-	bandwidhtGauge *kitprometheus.Gauge
+	ecs *ec.Edgecast
 }
 
 // TODO: update to fit to new collector
@@ -34,22 +32,6 @@ func NewEdgecastService() *edgecastService {
 	stdprometheus.Register(collector{})
 	e := &edgecastService{}
 	e.ecs = ec.NewEdgecastClient("testID", "testToken")
-	/*
-	 * Settings for logging the fetched metrics with Prometheus
-	 */
-	// Prometheus Metrics Settings for Edgecast Metrics
-	// bandwidth
-	fieldKeys := []string{"platform"}
-	e.bandwidhtGauge = kitprometheus.NewGaugeFrom(stdprometheus.GaugeOpts{
-		Namespace: "EDGECAST_METRICS",
-		Subsystem: "api_metrics",
-		Name:      "bandwidth",
-		Help:      "bandwidth metrics fetched from Edgecast API",
-	}, fieldKeys)
-	lvs := []string{"platform", "http_small"}
-	e.bandwidhtGauge.With(lvs...).Set(1) // initial value
-	println("test:", e.bandwidhtGauge)
-
 	return e
 }
 
