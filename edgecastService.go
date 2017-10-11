@@ -14,7 +14,9 @@ import (
 /*
  * GLOBAL VARIABLES //TODO: maybe replace with environment-variables
  */
-var EDGECAST_ENDPOINT = "https://api.edgecast.com/v2/realtimestats/customers/%s/media/%d/%s"
+const (
+	EDGECAST_ENDPOINT = "https://api.edgecast.com/v2/realtimestats/customers/%s/media/%d/%s"
+)
 
 // define business logic in an interface
 type EdgecastService interface {
