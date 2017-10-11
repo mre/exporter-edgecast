@@ -14,26 +14,46 @@ type instrumentingMiddleware struct {
 	next           edgecast.Edgecast
 }
 
-
-
-func (mw instrumentingMiddleware) GetData(s string) (output string, err error) {
+func (mw instrumentingMiddleware) Bandwidth(platform int) (bandwidthData *edgecast.BandwidthData, err error) {
 	defer func(begin time.Time) {
-		lvs := []string{"method", "getdata", "error", fmt.Sprint(err != nil)}
+		lvs := []string{"method", "Bandwidth", "error", fmt.Sprint(err != nil)}
 		mw.requestCount.With(lvs...).Add(1)
 		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
 	}(time.Now())
 
-	output, err = mw.next.GetData(s) // hand request to logged service
+	bandwidthData, err = mw.next.Bandwidth(platform) // hand request to logged service
 	return
 }
 
-func (mw instrumentingMiddleware) GetBandwidth(platform int) (bandwidthData *edgecast.BandwidthData, err error) {
+func (mw instrumentingMiddleware) Connections(platform int) (connectionData *edgecast.ConnectionData, err error) {
 	defer func(begin time.Time) {
-		lvs := []string{"method", "getbandwidth", "error", fmt.Sprint(err != nil)}
+		lvs := []string{"method", "Connections", "error", fmt.Sprint(err != nil)}
 		mw.requestCount.With(lvs...).Add(1)
 		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
 	}(time.Now())
 
-	bandwidthData, err = mw.next.GetBandwidth(platform) // hand request to logged service
+	connectionData, err = mw.next.Connections(platform) // hand request to logged service
+	return
+}
+
+func (mw instrumentingMiddleware) CacheStatus(platform int) (cacheStatusData *edgecast.CacheStatusData, err error) {
+	defer func(begin time.Time) {
+		lvs := []string{"method", "CacheStatus", "error", fmt.Sprint(err != nil)}
+		mw.requestCount.With(lvs...).Add(1)
+		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+	}(time.Now())
+
+	cacheStatusData, err = mw.next.CacheStatus(platform) // hand request to logged service
+	return
+}
+
+func (mw instrumentingMiddleware) StatusCodes(platform int) (statusCodeData *edgecast.StatusCodeData, err error) {
+	defer func(begin time.Time) {
+		lvs := []string{"method", "StatusCodes", "error", fmt.Sprint(err != nil)}
+		mw.requestCount.With(lvs...).Add(1)
+		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+	}(time.Now())
+
+	statusCodeData, err = mw.next.StatusCodes(platform) // hand request to logged service
 	return
 }

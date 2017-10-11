@@ -33,7 +33,7 @@ func (mw loggingMiddleware) Bandwidth(platform int) (bandwidthData *ec.Bandwidth
 func (mw loggingMiddleware) Connections(platform int) (connectionData *ec.ConnectionData, err error) {
 	defer func(begin time.Time) {
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
-			"method", "Bandwidth",
+			"method", "Connections",
 			"input", platform,
 			"output", connectionData,
 			"err", err,
@@ -48,7 +48,7 @@ func (mw loggingMiddleware) Connections(platform int) (connectionData *ec.Connec
 func (mw loggingMiddleware) CacheStatus(platform int) (cacheStatusData *ec.CacheStatusData, err error) {
 	defer func(begin time.Time) {
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
-			"method", "Bandwidth",
+			"method", "CacheStatus",
 			"input", platform,
 			"output", cacheStatusData,
 			"err", err,
@@ -63,7 +63,7 @@ func (mw loggingMiddleware) CacheStatus(platform int) (cacheStatusData *ec.Cache
 func (mw loggingMiddleware) StatusCodes(platform int) (statusCodeData *ec.StatusCodeData, err error) {
 	defer func(begin time.Time) {
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
-			"method", "Bandwidth",
+			"method", "StatusCodes",
 			"input", platform,
 			"output", statusCodeData,
 			"err", err,
