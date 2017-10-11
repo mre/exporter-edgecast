@@ -1,10 +1,13 @@
 package main
 
 import (
-	prometheus "github.com/prometheus/client_golang/prometheus"
+	"github.com/iwilltry42/edgecast"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
-type collector struct{}
+type edgecastCollector struct {
+	ec edgecast.Edgecast
+}
 
 const (
 	NAMESPACE = "Edgecast"
@@ -28,11 +31,15 @@ var (
 	)
 )
 
+func NewEdgecastCollector(accountID, token string) *edgecastCollector {
+	return &edgecastCollector{ec: *edgecast.NewEdgecastClient(accountID, token)}
+}
+
 /*
  * describes all exported metrics
  * implements function of interface prometheus.Collector
  */
-func (ec collector) Describe(ch chan<- *prometheus.Desc) {
+func (col edgecastCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- bandwidth
 	ch <- cachestatus
 	ch <- connections
@@ -43,7 +50,7 @@ func (ec collector) Describe(ch chan<- *prometheus.Desc) {
  * fetches metrics and exposes them in Prometheus format
  * implements function of interface prometheus.Collector
  */
-func (ec collector) Collect(ch chan<- prometheus.Metric) {
+func (col edgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, 1, []string{"http_large"}...)
 	ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, 2, variableLabels...)
 	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, 3, variableLabels...)

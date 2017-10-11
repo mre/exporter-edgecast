@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	ec "github.com/iwilltry42/edgecast"
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	//"github.com/prometheus/client_golang/prometheus/promhttp"
