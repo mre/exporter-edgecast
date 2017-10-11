@@ -22,6 +22,15 @@ const (
 )
 
 var (
+	// media-types/platforms
+	platforms = map[int]string{
+		2:  "flash",
+		3:  "http_large",
+		8:  "http_small",
+		14: "adn",
+	}
+
+	// possible variableLabels for metrics exposed to prometheus
 	variableLabels = []string{"platform"}
 
 	// Prepared Description of all fetchable metrics
@@ -59,7 +68,11 @@ func (col edgecastCollector) Describe(ch chan<- *prometheus.Desc) {
  * implements function of interface prometheus.Collector
  */
 func (col edgecastCollector) Collect(ch chan<- prometheus.Metric) {
-	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, 1, []string{"http_large"}...)
+	bw, _ := col.ec.Bandwidth(8)
+	bwBps := bw.Bps
+	bwPlatform := platforms[bw.Platform]
+
+	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, bwBps, []string{bwPlatform}...)
 	ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, 2, []string{"http_large"}...)
 	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, 3, []string{"http_large"}...)
 	ch <- prometheus.MustNewConstMetric(statuscodes, prometheus.GaugeValue, 4, []string{"http_large"}...)

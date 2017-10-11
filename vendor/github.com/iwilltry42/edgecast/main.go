@@ -138,7 +138,8 @@ func (e Edgecast) StatusCodes(platform int) (*StatusCodeData, error) {
 
 // fullURL creates a queryable URL for the current method
 func (e Edgecast) fullURL(platform int, method string) string {
-	return fmt.Sprintf(e.BaseURL, e.AccountID, platform, method)
+	return fmt.Sprintf("http://localhost:8070/api/%s", method)
+	//TODO: return fmt.Sprintf(e.BaseURL, e.AccountID, platform, method)
 }
 
 // request runs an API request using the given parameters and returns the raw request body or an error
