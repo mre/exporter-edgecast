@@ -8,29 +8,17 @@ import (
 
 type loggingMiddleware struct {
 	logger log.Logger
-	next   EdgecastService
+	next   ec.Edgecast
 }
 
-// logger for GetData function of edgecastService
-func (mw loggingMiddleware) GetData(s string) (output string, err error) {
+/*
+ * functions to implement EdgecastInterface
+ */
+
+func (mw loggingMiddleware) Bandwidth(platform int) (bandwidthData *ec.BandwidthData, err error) {
 	defer func(begin time.Time) {
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
-			"method", "getdata",
-			"input", s,
-			"output", output,
-			"err", err,
-			"took", time.Since(begin),
-		)
-	}(time.Now())
-
-	output, err = mw.next.GetData(s) // hand function call to service
-	return
-}
-
-func (mw loggingMiddleware) GetBandwidth(platform int) (bandwidthData *ec.BandwidthData, err error) {
-	defer func(begin time.Time) {
-		_ = mw.logger.Log( // params: alternating key-value-key-value-...
-			"method", "getbandwidth",
+			"method", "Bandwidth",
 			"input", platform,
 			"output", bandwidthData,
 			"err", err,
@@ -38,6 +26,6 @@ func (mw loggingMiddleware) GetBandwidth(platform int) (bandwidthData *ec.Bandwi
 		)
 	}(time.Now())
 
-	bandwidthData, err = mw.next.GetBandwidth(platform) // hand function call to service
+	bandwidthData, err = mw.next.Bandwidth(platform) // hand function call to service
 	return
 }

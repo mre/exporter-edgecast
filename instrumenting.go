@@ -11,8 +11,10 @@ import (
 type instrumentingMiddleware struct {
 	requestCount   metrics.Counter   // positive only counting value
 	requestLatency metrics.Histogram // bucket sampling
-	next           EdgecastService
+	next           edgecast.Edgecast
 }
+
+
 
 func (mw instrumentingMiddleware) GetData(s string) (output string, err error) {
 	defer func(begin time.Time) {
