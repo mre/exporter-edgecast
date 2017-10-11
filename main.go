@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"os"
 
+	// Edgecast Client
+	"github.com/iwilltry42/edgecast"
+
 	// Prometheus for logging/metrics
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -12,6 +15,11 @@ import (
 	// go-kit
 	"github.com/go-kit/kit/log"
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
+)
+
+var (
+	accountID = "testID"
+	token     = "testToken"
 )
 
 func main() {
@@ -33,8 +41,10 @@ func main() {
 	}, fieldKeys)
 
 	// create the actual service
-	var svc EdgecastService
-	svc = NewEdgecastService()
+	collector := NewEdgecastCollector(edgecast.NewEdgecastClient(accountID, token))
+	prometheus.MustRegister(collector)
+	var svc edgecast.Edgecast
+	svc = collector.ec
 	svc = loggingMiddleware{logger, svc} // attach logger to service
 	svc = instrumentingMiddleware{requestCount, requestLatency, svc}
 
