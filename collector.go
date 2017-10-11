@@ -5,6 +5,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+// interface to be used for logging and instrumenting middleware
+type EdgecastInterface interface {
+	Bandwidth(int) (*edgecast.BandwidthData, error)
+	Connections(int) (*edgecast.ConnectionData, error)
+	CacheStatus(int) (*edgecast.CacheStatusData, error)
+	StatusCodes(int) (*edgecast.StatusCodeData, error)
+}
+
 type edgecastCollector struct {
 	ec edgecast.Edgecast
 }

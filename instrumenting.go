@@ -11,7 +11,7 @@ import (
 type instrumentingMiddleware struct {
 	requestCount   metrics.Counter   // positive only counting value
 	requestLatency metrics.Histogram // bucket sampling
-	next           edgecast.Edgecast
+	next           EdgecastInterface
 }
 
 func (mw instrumentingMiddleware) Bandwidth(platform int) (bandwidthData *edgecast.BandwidthData, err error) {

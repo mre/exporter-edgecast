@@ -47,14 +47,6 @@ const (
 	MediaTypeADN   = 14
 )
 
-// interface to be used for logging and instrumenting middleware
-type EdgecastInterface interface {
-	Bandwidth(int) (*BandwidthData, error)
-	Connections(int) (*ConnectionData, error)
-	CacheStatus(int) (*CacheStatusData, error)
-	StatusCodes(int) (*StatusCodeData, error)
-}
-
 // Edgecast client for Go
 type Edgecast struct {
 	AccountID string

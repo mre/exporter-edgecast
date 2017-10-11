@@ -28,13 +28,13 @@ func main() {
 	// Prometheus metrics settings for this service
 	fieldKeys := []string{"method", "error"} // label names
 	requestCount := kitprometheus.NewCounterFrom(prometheus.CounterOpts{
-		Namespace: "EDGECAST",
+		Namespace: "Edgecast",
 		Subsystem: "service_metrics",
 		Name:      "request_count",
 		Help:      "Number of requests received.",
 	}, fieldKeys)
 	requestLatency := kitprometheus.NewSummaryFrom(prometheus.SummaryOpts{
-		Namespace: "EDGECAST",
+		Namespace: "Edgecast",
 		Subsystem: "service_metrics",
 		Name:      "request_latency_microseconds",
 		Help:      "Total duration of requests in microseconds.",
@@ -43,7 +43,7 @@ func main() {
 	// create the actual service
 	collector := NewEdgecastCollector(edgecast.NewEdgecastClient(accountID, token))
 	prometheus.MustRegister(collector)
-	var svc edgecast.Edgecast
+	var svc EdgecastInterface
 	svc = collector.ec
 	svc = loggingMiddleware{logger, svc} // attach logger to service
 	svc = instrumentingMiddleware{requestCount, requestLatency, svc}

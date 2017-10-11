@@ -8,7 +8,7 @@ import (
 
 type loggingMiddleware struct {
 	logger log.Logger
-	next   ec.Edgecast
+	next   EdgecastInterface
 }
 
 /*
