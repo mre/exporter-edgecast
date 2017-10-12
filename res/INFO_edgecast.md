@@ -6,7 +6,7 @@ They are identified by an integer value and passed to the API url.
 Those are the available platforms:
 | name       | value | usage/data                                          |
 |------------|-------|-----------------------------------------------------|
-| flash      | 2     | unknown                                             |
+| flash      | 2     | Flash Media Streaming                               |
 | http_large | 3     | bulk objeccts (>= 300KB) stored on an ordinary disk |
 | http_small | 8     | small objects (< 300KB) stored on SSD storage       |
 | adn        | 14    | Application Delivery Network (ADN)                  |

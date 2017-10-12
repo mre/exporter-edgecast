@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"github.com/iwilltry42/edgecast"
 	"github.com/prometheus/client_golang/prometheus"
+	"reflect"
 	"sync"
 )
 
@@ -89,27 +91,39 @@ func (col edgecastCollector) metrics(ch chan<- prometheus.Metric, collectWaitgro
 }
 
 func (col edgecastCollector) bandwidth(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
-	bw, _ := col.ec.Bandwidth(platform)
-	bwBps := bw.Bps
-	bwPlatform := platforms[bw.Platform]
-	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, bwBps, []string{bwPlatform}...)
-	metricsWaitGroup.Done()
+	defer metricsWaitGroup.Done()
+
+	bw, err := col.ec.Bandwidth(platform)
+	if err == nil {
+		bwBps := bw.Bps
+		bwPlatform := platforms[bw.Platform]
+		ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, bwBps, []string{bwPlatform}...)
+	}
 }
 
 func (col edgecastCollector) connections(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
-	con, _ := col.ec.Connections(platform)
-	conCon := con.Connections
-	conPlatform := platforms[con.Platform]
-	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, conCon, []string{conPlatform}...)
-	metricsWaitGroup.Done()
+	defer metricsWaitGroup.Done()
+
+	con, err := col.ec.Connections(platform)
+	if err == nil {
+		conCon := con.Connections
+		conPlatform := platforms[con.Platform]
+		ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, conCon, []string{conPlatform}...)
+	}
 }
 
 func (col edgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
-	// TODO: do something
-	metricsWaitGroup.Done()
+	defer metricsWaitGroup.Done()
+
+	cs, err := col.ec.CacheStatus(platform)
+	if err == nil {
+		bla := *cs
+		fmt.Println("CACHESTATUS: ", bla[0].CacheStatus, " - type of: ", reflect.TypeOf(*cs))
+	}
+
 }
 
 func (col edgecastCollector) statuscodes(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+	defer metricsWaitGroup.Done()
 	// TODO: do something
-	metricsWaitGroup.Done()
 }
