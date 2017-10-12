@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/iwilltry42/edgecast"
 	"github.com/prometheus/client_golang/prometheus"
-	"reflect"
 	"sync"
 )
 
@@ -33,21 +32,18 @@ var (
 		14: "adn",
 	}
 
-	// possible variableLabels for metrics exposed to prometheus
-	variableLabels = []string{"platform"}
-
 	// Prepared Description of all fetchable metrics
 	bandwidth = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "bandwidth"), "Bandwidth (Mbps).", variableLabels, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "bandwidth"), "Bandwidth (Mbps).", []string{"platform"}, nil,
 	)
 	cachestatus = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "cachestatus"), "Connections per Cachestatus.", variableLabels, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "cachestatus"), "Connections per Cachestatus.", []string{"platform", "CacheStatus"}, nil,
 	)
 	connections = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "connections"), "Number of Connections.", variableLabels, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "connections"), "Number of Connections.", []string{"platform"}, nil,
 	)
 	statuscodes = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "statuscodes"), "Connections per Statuscode.", variableLabels, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "statuscodes"), "Connections per Statuscode.", []string{"platform", "StatusCode"}, nil,
 	)
 )
 
@@ -117,8 +113,10 @@ func (col edgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWai
 
 	cs, err := col.ec.CacheStatus(platform)
 	if err == nil {
-		bla := *cs
-		fmt.Println("CACHESTATUS: ", bla[0].CacheStatus, " - type of: ", reflect.TypeOf(*cs))
+		cachestatusList := *cs
+		for c := range cachestatusList {
+		}
+
 	}
 
 }
