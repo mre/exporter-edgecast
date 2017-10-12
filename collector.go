@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/iwilltry42/edgecast"
 	"github.com/prometheus/client_golang/prometheus"
 	"sync"
@@ -113,8 +112,13 @@ func (col edgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWai
 
 	cs, err := col.ec.CacheStatus(platform)
 	if err == nil {
-		cachestatusList := *cs
-		for c := range cachestatusList {
+		csList := *cs
+		var val float64
+		var labelVals []string
+		for c := range csList {
+			val = float64(csList[c].Connections)
+			labelVals = []string{platforms[platform], csList[c].CacheStatus}
+			ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, val, labelVals...)
 		}
 
 	}
@@ -123,5 +127,16 @@ func (col edgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWai
 
 func (col edgecastCollector) statuscodes(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
-	// TODO: do something
+
+	sc, err := col.ec.StatusCodes(platform)
+	if err == nil {
+		scList := *sc
+		var val float64
+		var labelVals []string
+		for s := range scList {
+			val = float64(scList[s].Connections)
+			labelVals = []string{platforms[platform], scList[s].StatusCode}
+			ch <- prometheus.MustNewConstMetric(statuscodes, prometheus.GaugeValue, val, labelVals...)
+		}
+	}
 }
