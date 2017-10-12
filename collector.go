@@ -14,12 +14,14 @@ type EdgecastInterface interface {
 	StatusCodes(int) (*edgecast.StatusCodeData, error)
 }
 
+// EdgecastCollector needs an edgecast client that implements the given interface to fetch metrics from edgecast API
 type EdgecastCollector struct {
 	ec EdgecastInterface
 }
 
 const (
-	NAMESPACE = "Edgecast" // namespace declaration for all exposed metrics in Prometheus
+	// NAMESPACE declaration for all exposed metrics in Prometheus
+	NAMESPACE = "Edgecast"
 )
 
 var (
@@ -52,8 +54,8 @@ func NewEdgecastCollector(edgecast2 *EdgecastInterface) *EdgecastCollector {
 }
 
 /*
- * describes all exported metrics
- * implements function of interface prometheus.Collector
+ * Describe describes all exported metrics
+ * - implements function of interface prometheus.Collector
  */
 func (col EdgecastCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- bandwidth
@@ -63,8 +65,9 @@ func (col EdgecastCollector) Describe(ch chan<- *prometheus.Desc) {
 }
 
 /*
- * fetches metrics and exposes them in Prometheus format
- * implements function of interface prometheus.Collector
+ * Collect is called by Prometheus Server
+ * - concurrently fetches metrics for all possible platforms and exposes them in Prometheus format
+ * - implements function of interface prometheus.Collector
  */
 func (col EdgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	var collectWaitGroup sync.WaitGroup
@@ -75,6 +78,9 @@ func (col EdgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	collectWaitGroup.Wait()
 }
 
+/*
+ * metrics() concurrently fetches all possible metric types for a given platform
+ */
 func (col EdgecastCollector) metrics(ch chan<- prometheus.Metric, collectWaitgroup *sync.WaitGroup, platform int) {
 	var metricsWaitGroup sync.WaitGroup
 	metricsWaitGroup.Add(4) // 4 goroutines per platform for the 4 possible metric types
@@ -86,6 +92,7 @@ func (col EdgecastCollector) metrics(ch chan<- prometheus.Metric, collectWaitgro
 	collectWaitgroup.Done() // DONE fetching and exposing metrics for this platform
 }
 
+// bandwidth() fetches bandwidth metrics from API and pushes them to the channel as a new prometheus const metric
 func (col EdgecastCollector) bandwidth(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
 
@@ -97,6 +104,7 @@ func (col EdgecastCollector) bandwidth(ch chan<- prometheus.Metric, metricsWaitG
 	}
 }
 
+// connections() fetches connection metrics from API and pushes them to the channel as a new prometheus const metric
 func (col EdgecastCollector) connections(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
 
@@ -108,6 +116,7 @@ func (col EdgecastCollector) connections(ch chan<- prometheus.Metric, metricsWai
 	}
 }
 
+// cachestatus() fetches cachestatus metrics from API and pushes them to the channel as a new prometheus const metric
 func (col EdgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
 
@@ -126,6 +135,7 @@ func (col EdgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWai
 
 }
 
+// statuscodes() fetches statuscodes metrics from API and pushes them to the channel as a new prometheus const metric
 func (col EdgecastCollector) statuscodes(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
 
