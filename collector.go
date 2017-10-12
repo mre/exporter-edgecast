@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/iwilltry42/edgecast"
 	"github.com/prometheus/client_golang/prometheus"
+	"sync"
 )
 
 // interface to be used for logging and instrumenting middleware
@@ -68,20 +69,47 @@ func (col edgecastCollector) Describe(ch chan<- *prometheus.Desc) {
  * implements function of interface prometheus.Collector
  */
 func (col edgecastCollector) Collect(ch chan<- prometheus.Metric) {
+	var collectWaitGroup sync.WaitGroup
+	for p := range platforms { // for each possible platform concurrently
+		collectWaitGroup.Add(1)
+		go col.metrics(ch, &collectWaitGroup, p) // fetch all possible metrics concurrently
+	}
+	collectWaitGroup.Wait()
+}
 
-	// Bandwidth Data for http_small platform
-	bw, _ := col.ec.Bandwidth(edgecast.MediaTypeSmall)
+func (col edgecastCollector) metrics(ch chan<- prometheus.Metric, collectWaitgroup *sync.WaitGroup, platform int) {
+	var metricsWaitGroup sync.WaitGroup
+	metricsWaitGroup.Add(4) // 4 goroutines per platform for the 4 possible metric types
+	go col.bandwidth(ch, &metricsWaitGroup, platform)
+	go col.connections(ch, &metricsWaitGroup, platform)
+	go col.cachestatus(ch, &metricsWaitGroup, platform)
+	go col.statuscodes(ch, &metricsWaitGroup, platform)
+	metricsWaitGroup.Wait() // wait for metric-fetching to finish
+	collectWaitgroup.Done() // DONE fetching and exposing metrics for this platform
+}
+
+func (col edgecastCollector) bandwidth(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+	bw, _ := col.ec.Bandwidth(platform)
 	bwBps := bw.Bps
 	bwPlatform := platforms[bw.Platform]
-
-	// Bandwidth Data for http_small platform
-	bwl, _ := col.ec.Bandwidth(edgecast.MediaTypeLarge)
-	bwlBps := bwl.Bps
-	bwlPlatform := platforms[bw.Platform]
-
 	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, bwBps, []string{bwPlatform}...)
-	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, bwlBps, []string{bwlPlatform}...)
-	ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, 2, []string{"http_large"}...)
-	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, 3, []string{"http_large"}...)
-	ch <- prometheus.MustNewConstMetric(statuscodes, prometheus.GaugeValue, 4, []string{"http_large"}...)
+	metricsWaitGroup.Done()
+}
+
+func (col edgecastCollector) connections(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+	con, _ := col.ec.Connections(platform)
+	conCon := con.Connections
+	conPlatform := platforms[con.Platform]
+	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, conCon, []string{conPlatform}...)
+	metricsWaitGroup.Done()
+}
+
+func (col edgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+	// TODO: do something
+	metricsWaitGroup.Done()
+}
+
+func (col edgecastCollector) statuscodes(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+	// TODO: do something
+	metricsWaitGroup.Done()
 }
