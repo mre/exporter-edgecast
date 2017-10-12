@@ -68,11 +68,19 @@ func (col edgecastCollector) Describe(ch chan<- *prometheus.Desc) {
  * implements function of interface prometheus.Collector
  */
 func (col edgecastCollector) Collect(ch chan<- prometheus.Metric) {
-	bw, _ := col.ec.Bandwidth(8)
+
+	// Bandwidth Data for http_small platform
+	bw, _ := col.ec.Bandwidth(edgecast.MediaTypeSmall)
 	bwBps := bw.Bps
 	bwPlatform := platforms[bw.Platform]
 
+	// Bandwidth Data for http_small platform
+	bwl, _ := col.ec.Bandwidth(edgecast.MediaTypeLarge)
+	bwlBps := bwl.Bps
+	bwlPlatform := platforms[bw.Platform]
+
 	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, bwBps, []string{bwPlatform}...)
+	ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, bwlBps, []string{bwlPlatform}...)
 	ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, 2, []string{"http_large"}...)
 	ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, 3, []string{"http_large"}...)
 	ch <- prometheus.MustNewConstMetric(statuscodes, prometheus.GaugeValue, 4, []string{"http_large"}...)

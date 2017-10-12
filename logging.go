@@ -20,7 +20,7 @@ func (mw loggingMiddleware) Bandwidth(platform int) (bandwidthData *ec.Bandwidth
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "Bandwidth",
 			"input", platform,
-			"output", bandwidthData,
+			"output", bandwidthData.Bps,
 			"err", err,
 			"took", time.Since(begin),
 		)
@@ -35,7 +35,7 @@ func (mw loggingMiddleware) Connections(platform int) (connectionData *ec.Connec
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "Connections",
 			"input", platform,
-			"output", connectionData,
+			"output", connectionData.Connections,
 			"err", err,
 			"took", time.Since(begin),
 		)
