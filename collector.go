@@ -14,12 +14,12 @@ type EdgecastInterface interface {
 	StatusCodes(int) (*edgecast.StatusCodeData, error)
 }
 
-type edgecastCollector struct {
+type EdgecastCollector struct {
 	ec EdgecastInterface
 }
 
 const (
-	NAMESPACE = "Edgecast"
+	NAMESPACE = "Edgecast" // namespace declaration for all exposed metrics in Prometheus
 )
 
 var (
@@ -46,15 +46,16 @@ var (
 	)
 )
 
-func NewEdgecastCollector(edgecast2 *EdgecastInterface) *edgecastCollector {
-	return &edgecastCollector{ec: *edgecast2}
+// NewEdgecastCollector constructs a new EdgecastCollector using a given edgecast-client that implements the EdgecastInterface
+func NewEdgecastCollector(edgecast2 *EdgecastInterface) *EdgecastCollector {
+	return &EdgecastCollector{ec: *edgecast2}
 }
 
 /*
  * describes all exported metrics
  * implements function of interface prometheus.Collector
  */
-func (col edgecastCollector) Describe(ch chan<- *prometheus.Desc) {
+func (col EdgecastCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- bandwidth
 	ch <- cachestatus
 	ch <- connections
@@ -65,7 +66,7 @@ func (col edgecastCollector) Describe(ch chan<- *prometheus.Desc) {
  * fetches metrics and exposes them in Prometheus format
  * implements function of interface prometheus.Collector
  */
-func (col edgecastCollector) Collect(ch chan<- prometheus.Metric) {
+func (col EdgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	var collectWaitGroup sync.WaitGroup
 	for p := range platforms { // for each possible platform concurrently
 		collectWaitGroup.Add(1)
@@ -74,7 +75,7 @@ func (col edgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	collectWaitGroup.Wait()
 }
 
-func (col edgecastCollector) metrics(ch chan<- prometheus.Metric, collectWaitgroup *sync.WaitGroup, platform int) {
+func (col EdgecastCollector) metrics(ch chan<- prometheus.Metric, collectWaitgroup *sync.WaitGroup, platform int) {
 	var metricsWaitGroup sync.WaitGroup
 	metricsWaitGroup.Add(4) // 4 goroutines per platform for the 4 possible metric types
 	go col.bandwidth(ch, &metricsWaitGroup, platform)
@@ -85,7 +86,7 @@ func (col edgecastCollector) metrics(ch chan<- prometheus.Metric, collectWaitgro
 	collectWaitgroup.Done() // DONE fetching and exposing metrics for this platform
 }
 
-func (col edgecastCollector) bandwidth(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+func (col EdgecastCollector) bandwidth(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
 
 	bw, err := col.ec.Bandwidth(platform)
@@ -96,7 +97,7 @@ func (col edgecastCollector) bandwidth(ch chan<- prometheus.Metric, metricsWaitG
 	}
 }
 
-func (col edgecastCollector) connections(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+func (col EdgecastCollector) connections(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
 
 	con, err := col.ec.Connections(platform)
@@ -107,7 +108,7 @@ func (col edgecastCollector) connections(ch chan<- prometheus.Metric, metricsWai
 	}
 }
 
-func (col edgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+func (col EdgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
 
 	cs, err := col.ec.CacheStatus(platform)
@@ -125,7 +126,7 @@ func (col edgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWai
 
 }
 
-func (col edgecastCollector) statuscodes(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
+func (col EdgecastCollector) statuscodes(ch chan<- prometheus.Metric, metricsWaitGroup *sync.WaitGroup, platform int) {
 	defer metricsWaitGroup.Done()
 
 	sc, err := col.ec.StatusCodes(platform)
