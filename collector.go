@@ -26,7 +26,7 @@ const (
 
 var (
 	// media-types/platforms
-	platforms = map[int]string{
+	Platforms = map[int]string{
 		2:  "flash",
 		3:  "http_large",
 		8:  "http_small",
@@ -71,7 +71,7 @@ func (col EdgecastCollector) Describe(ch chan<- *prometheus.Desc) {
  */
 func (col EdgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	var collectWaitGroup sync.WaitGroup
-	for p := range platforms { // for each possible platform concurrently
+	for p := range Platforms { // for each possible platform concurrently
 		collectWaitGroup.Add(1)
 		go col.metrics(ch, &collectWaitGroup, p) // fetch all possible metrics concurrently
 	}
@@ -99,7 +99,7 @@ func (col EdgecastCollector) bandwidth(ch chan<- prometheus.Metric, metricsWaitG
 	bw, err := col.ec.Bandwidth(platform)
 	if err == nil {
 		bwBps := bw.Bps
-		bwPlatform := platforms[bw.Platform]
+		bwPlatform := Platforms[bw.Platform]
 		ch <- prometheus.MustNewConstMetric(bandwidth, prometheus.GaugeValue, bwBps, []string{bwPlatform}...)
 	}
 }
@@ -111,7 +111,7 @@ func (col EdgecastCollector) connections(ch chan<- prometheus.Metric, metricsWai
 	con, err := col.ec.Connections(platform)
 	if err == nil {
 		conCon := con.Connections
-		conPlatform := platforms[con.Platform]
+		conPlatform := Platforms[con.Platform]
 		ch <- prometheus.MustNewConstMetric(connections, prometheus.GaugeValue, conCon, []string{conPlatform}...)
 	}
 }
@@ -127,7 +127,7 @@ func (col EdgecastCollector) cachestatus(ch chan<- prometheus.Metric, metricsWai
 		var labelVals []string
 		for c := range csList {
 			val = float64(csList[c].Connections)
-			labelVals = []string{platforms[platform], csList[c].CacheStatus}
+			labelVals = []string{Platforms[platform], csList[c].CacheStatus}
 			ch <- prometheus.MustNewConstMetric(cachestatus, prometheus.GaugeValue, val, labelVals...)
 		}
 
@@ -146,7 +146,7 @@ func (col EdgecastCollector) statuscodes(ch chan<- prometheus.Metric, metricsWai
 		var labelVals []string
 		for s := range scList {
 			val = float64(scList[s].Connections)
-			labelVals = []string{platforms[platform], scList[s].StatusCode}
+			labelVals = []string{Platforms[platform], scList[s].StatusCode}
 			ch <- prometheus.MustNewConstMetric(statuscodes, prometheus.GaugeValue, val, labelVals...)
 		}
 	}

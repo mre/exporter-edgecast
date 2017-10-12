@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-kit/kit/log"
 	ec "github.com/iwilltry42/edgecast"
 	"time"
@@ -16,10 +17,11 @@ type loggingMiddleware struct {
  */
 
 func (mw loggingMiddleware) Bandwidth(platform int) (bandwidthData *ec.BandwidthData, err error) {
+
 	defer func(begin time.Time) {
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "Bandwidth",
-			"input", platform,
+			"platform", fmt.Sprintf("%d(%s)", platform, Platforms[platform]),
 			"output", bandwidthData.Bps,
 			"err", err,
 			"took", time.Since(begin),
@@ -34,7 +36,7 @@ func (mw loggingMiddleware) Connections(platform int) (connectionData *ec.Connec
 	defer func(begin time.Time) {
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "Connections",
-			"input", platform,
+			"platform", fmt.Sprintf("%d(%s)", platform, Platforms[platform]),
 			"output", connectionData.Connections,
 			"err", err,
 			"took", time.Since(begin),
@@ -49,7 +51,7 @@ func (mw loggingMiddleware) CacheStatus(platform int) (cacheStatusData *ec.Cache
 	defer func(begin time.Time) {
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "CacheStatus",
-			"input", platform,
+			"platform", fmt.Sprintf("%d(%s)", platform, Platforms[platform]),
 			"output", cacheStatusData,
 			"err", err,
 			"took", time.Since(begin),
@@ -64,7 +66,7 @@ func (mw loggingMiddleware) StatusCodes(platform int) (statusCodeData *ec.Status
 	defer func(begin time.Time) {
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "StatusCodes",
-			"input", platform,
+			"platform", fmt.Sprintf("%d(%s)", platform, Platforms[platform]),
 			"output", statusCodeData,
 			"err", err,
 			"took", time.Since(begin),
