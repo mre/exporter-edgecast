@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-// interface to be used for logging and instrumenting middleware
+// EdgecastInterface to be used for logging and instrumenting middleware
 type EdgecastInterface interface {
 	Bandwidth(int) (*edgecast.BandwidthData, error)
 	Connections(int) (*edgecast.ConnectionData, error)
@@ -33,16 +33,16 @@ var (
 
 	// Prepared Description of all fetchable metrics
 	bandwidth = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "bandwidth"), "Bandwidth (Mbps).", []string{"platform"}, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "bandwidth"), "Current amount of bandwidth usage per platform (Mbps).", []string{"platform"}, nil,
 	)
 	cachestatus = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "cachestatus"), "Connections per Cachestatus.", []string{"platform", "CacheStatus"}, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "cachestatus"), "Breakdown of the cache statuses currently being returned for requests to CDN account.", []string{"platform", "CacheStatus"}, nil,
 	)
 	connections = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "connections"), "Number of Connections.", []string{"platform"}, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "connections"), "TOtal active connections per second per platform.", []string{"platform"}, nil,
 	)
 	statuscodes = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "statuscodes"), "Connections per Statuscode.", []string{"platform", "StatusCode"}, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "statuscodes"), "Breakdown of the HTTP status codes currently being returned for requests to CDN account.", []string{"platform", "StatusCode"}, nil,
 	)
 )
 
