@@ -41,7 +41,7 @@ var (
 		prometheus.BuildFQName(NAMESPACE, "metrics", "cachestatus"), "Breakdown of the cache statuses currently being returned for requests to CDN account.", []string{"platform", "CacheStatus"}, nil,
 	)
 	connections = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "connections"), "TOtal active connections per second per platform.", []string{"platform"}, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "connections"), "Total active connections per second per platform.", []string{"platform"}, nil,
 	)
 	statuscodes = prometheus.NewDesc(
 		prometheus.BuildFQName(NAMESPACE, "metrics", "statuscodes"), "Breakdown of the HTTP status codes currently being returned for requests to CDN account.", []string{"platform", "StatusCode"}, nil,
@@ -53,10 +53,8 @@ func NewEdgecastCollector(edgecast2 *EdgecastInterface) *EdgecastCollector {
 	return &EdgecastCollector{ec: *edgecast2}
 }
 
-/*
- * Describe describes all exported metrics
- * - implements function of interface prometheus.Collector
- */
+// Describe describes all exported metrics
+//- implements function of interface prometheus.Collector
 func (col EdgecastCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- bandwidth
 	ch <- cachestatus

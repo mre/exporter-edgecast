@@ -15,7 +15,7 @@ $(GOMETALINTER):
 .PHONY: lint
 lint: $(GOMETALINTER)
 	# recursevly run gometalinter on all files in this directory, skipping packages in vendor
-	gometalinter ./... --vendor
+	gometalinter ./... --vendor --disable=gotype
 
 # build everything in this directory and sub-directories
 # TODO: work this out
