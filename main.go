@@ -18,8 +18,8 @@ import (
 )
 
 var (
-	accountID = "testID"
-	token     = "testToken"
+	accountID = os.Getenv("EDGECAST_ACCOUNT_ID")
+	token     = os.Getenv("EDGECAST_TOKEN")
 )
 
 func main() {
