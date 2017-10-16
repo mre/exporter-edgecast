@@ -24,6 +24,11 @@ var (
 
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
+	if len(accountID) == 0 || len(token) == 0 {
+		logger.Log("ERROR: empty Account-ID or Token!")
+		os.Exit(1)
+	}
+	logger.Log("Account-ID", accountID, "Token", token)
 
 	// Prometheus metrics settings for this service
 	fieldKeys := []string{"method", "error"} // label names
