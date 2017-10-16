@@ -25,7 +25,7 @@ const (
 )
 
 var (
-	// media-types/platforms
+	// Platforms maps all possible media-types/platforms to it's IDs used in a request
 	Platforms = map[int]string{
 		2:  "flash",
 		3:  "http_large",
@@ -62,11 +62,9 @@ func (col EdgecastCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- statuscodes
 }
 
-/*
- * Collect is called by Prometheus Server
- * - concurrently fetches metrics for all possible platforms and exposes them in Prometheus format
- * - implements function of interface prometheus.Collector
- */
+// Collect is called by Prometheus Server
+// - concurrently fetches metrics for all possible platforms and exposes them in Prometheus format
+//- implements function of interface prometheus.Collector
 func (col EdgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	var collectWaitGroup sync.WaitGroup
 	for p := range Platforms { // for each possible platform concurrently

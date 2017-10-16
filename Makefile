@@ -32,9 +32,3 @@ dockerbuild:
 .PHONY: dockerrun
 dockerrun:
 	sudo docker run -P --name test --rm test
-
-# run main service package
-.PHONY: run
-run:
-	go run ./main/*.go
-

@@ -13,6 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	// go-kit
+	"errors"
 	"fmt"
 	"github.com/go-kit/kit/log"
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
@@ -26,10 +27,10 @@ var (
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
 	if len(accountID) == 0 || len(token) == 0 {
-		fmt.Println("ERROR: empty Account-ID or Token!\n-> Please specify using environment variables EDGECAST_ACCOUNT_ID and EDGECAST_TOKEN")
+		fmt.Println(errors.New("ERROR: empty Account-ID or Token!\n-> Please specify using environment variables EDGECAST_ACCOUNT_ID and EDGECAST_TOKEN"))
 		os.Exit(1)
 	}
-	logger.Log("Account-ID", accountID, "Token", token)
+	_ = logger.Log("Account-ID", accountID, "Token", token)
 
 	// Prometheus metrics settings for this service
 	fieldKeys := []string{"method", "error"} // label names
@@ -47,8 +48,7 @@ func main() {
 	}, fieldKeys)
 
 	// create EdgecastClient that implements the interface and wrap it with logging and instrumenting middleware
-	var svc EdgecastInterface
-	svc = edgecast.NewEdgecastClient(accountID, token)
+	var svc EdgecastInterface = edgecast.NewEdgecastClient(accountID, token)
 	svc = loggingMiddleware{logger, svc} // attach logger to service
 	svc = instrumentingMiddleware{requestCount, requestLatency, svc}
 
@@ -60,6 +60,6 @@ func main() {
 	http.Handle("/metrics", promhttp.Handler())
 
 	// set up logger and start service on port 8090
-	logger.Log("msg", "HTTP", "addr", ":8090")
-	logger.Log("err", http.ListenAndServe(":8090", nil))
+	_ = logger.Log("msg", "HTTP", "addr", ":8090")
+	_ = logger.Log("err", http.ListenAndServe(":8090", nil))
 }
