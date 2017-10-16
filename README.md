@@ -15,10 +15,8 @@ Migrating a monolithic PHP application to Microservices written in Go
 * get dep here: https://github.com/golang/dep
 
 ### make a call to serving microservice:
-- via: curl -XPOST -d'{"s":"jfk"}' localhost:8080/
-- via postman: 
-    + URL: localhost:8080/
-    + Body (raw): {"s":"jfk"}
+- GET on http://localhost:8080/metrics
+- via Prometheus: prometheus -config-file=res/prometheus.yml
 
 # the res folder
 - contains useful information on files and packages

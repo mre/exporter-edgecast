@@ -27,11 +27,11 @@ build:
 # TODO: enhance
 .PHONY: dockerbuild
 dockerbuild:
-	docker build -t test .
+	sudo docker build -t test .
 
 .PHONY: dockerrun
 dockerrun:
-	docker run --publish 6070:8090 --name test --rm test
+	sudo docker run -P --name test --rm test
 
 # run main service package
 .PHONY: run
