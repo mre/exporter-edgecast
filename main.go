@@ -13,6 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	// go-kit
+	"fmt"
 	"github.com/go-kit/kit/log"
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 )
@@ -25,7 +26,7 @@ var (
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
 	if len(accountID) == 0 || len(token) == 0 {
-		logger.Log("ERROR: empty Account-ID or Token!")
+		fmt.Println("ERROR: empty Account-ID or Token!\n-> Please specify using environmentvariables EDGECAST_ACCOUNT_ID and EDGECAST_TOKEN")
 		os.Exit(1)
 	}
 	logger.Log("Account-ID", accountID, "Token", token)

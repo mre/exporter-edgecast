@@ -23,6 +23,16 @@ lint: $(GOMETALINTER)
 build:
 	go build -o bin/main
 
+# build docker image
+# TODO: enhance
+.PHONY: dockerbuild
+dockerbuild:
+	docker build -t test .
+
+.PHONY: dockerrun
+dockerrun:
+	docker run --publish 6070:8090 --name test --rm test
+
 # run main service package
 .PHONY: run
 run:
