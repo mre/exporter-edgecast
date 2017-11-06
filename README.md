@@ -22,3 +22,7 @@ Migrating a monolithic PHP application to Microservices written in Go
 - contains useful information on files and packages
 - contains class/project/Entity-Relationship-Diagrams
     + created with https://github.com/gmarik/go-erd
+    + ```go-erd -path . | dot -Tsvg > out.svg```
+- call graph created with go-callvis
+    + ```go-callvis [OPTIONS] <main pkg> | dot -Tpng -o output.png```
+    + grouped by package using option ```-group pkg```
