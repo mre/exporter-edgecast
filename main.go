@@ -43,14 +43,20 @@ func main() {
 	requestLatency := kitprometheus.NewSummaryFrom(prometheus.SummaryOpts{
 		Namespace: "Edgecast",
 		Subsystem: "service_metrics",
-		Name:      "request_latency_microseconds",
-		Help:      "Total duration of requests in microseconds.",
+		Name:      "request_latency_distribution_seconds",
+		Help:      "Total duration of requests in seconds.",
+	}, fieldKeys)
+	requestGauge := kitprometheus.NewGaugeFrom(prometheus.GaugeOpts{
+		Namespace: "Edgecast",
+		Subsystem: "service_metrics",
+		Name:      "request_latency_seconds",
+		Help:      "Duration of request in seconds.",
 	}, fieldKeys)
 
 	// create EdgecastClient that implements the interface and wrap it with logging and instrumenting middleware
 	var svc EdgecastInterface = edgecast.NewEdgecastClient(accountID, token)
 	svc = loggingMiddleware{logger, svc} // attach logger to service
-	svc = instrumentingMiddleware{requestCount, requestLatency, svc}
+	svc = instrumentingMiddleware{requestCount, requestLatency, requestGauge, svc}
 
 	// create the prometheus collector that uses the EdgecastClient and register it to prometheus
 	collector := NewEdgecastCollector(&svc)

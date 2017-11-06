@@ -9,16 +9,18 @@ import (
 )
 
 type instrumentingMiddleware struct {
-	requestCount   metrics.Counter   // positive only counting value
-	requestLatency metrics.Histogram // bucket sampling
-	next           EdgecastInterface
+	requestCount               metrics.Counter   // positive only counting value
+	requestLatencyDistribution metrics.Histogram // bucket sampling
+	requestLatency             metrics.Gauge
+	next                       EdgecastInterface
 }
 
 func (mw instrumentingMiddleware) Bandwidth(platform int) (bandwidthData *edgecast.BandwidthData, err error) {
 	defer func(begin time.Time) {
 		lvs := []string{"method", "Bandwidth", "error", fmt.Sprint(err != nil)}
 		mw.requestCount.With(lvs...).Add(1)
-		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.requestLatencyDistribution.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.requestLatency.With(lvs...).Set(time.Since(begin).Seconds())
 	}(time.Now())
 
 	bandwidthData, err = mw.next.Bandwidth(platform) // hand request to logged service
@@ -29,7 +31,8 @@ func (mw instrumentingMiddleware) Connections(platform int) (connectionData *edg
 	defer func(begin time.Time) {
 		lvs := []string{"method", "Connections", "error", fmt.Sprint(err != nil)}
 		mw.requestCount.With(lvs...).Add(1)
-		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.requestLatencyDistribution.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.requestLatency.With(lvs...).Set(time.Since(begin).Seconds())
 	}(time.Now())
 
 	connectionData, err = mw.next.Connections(platform) // hand request to logged service
@@ -40,7 +43,8 @@ func (mw instrumentingMiddleware) CacheStatus(platform int) (cacheStatusData *ed
 	defer func(begin time.Time) {
 		lvs := []string{"method", "CacheStatus", "error", fmt.Sprint(err != nil)}
 		mw.requestCount.With(lvs...).Add(1)
-		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.requestLatencyDistribution.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.requestLatency.With(lvs...).Set(time.Since(begin).Seconds())
 	}(time.Now())
 
 	cacheStatusData, err = mw.next.CacheStatus(platform) // hand request to logged service
@@ -51,7 +55,8 @@ func (mw instrumentingMiddleware) StatusCodes(platform int) (statusCodeData *edg
 	defer func(begin time.Time) {
 		lvs := []string{"method", "StatusCodes", "error", fmt.Sprint(err != nil)}
 		mw.requestCount.With(lvs...).Add(1)
-		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.requestLatencyDistribution.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.requestLatency.With(lvs...).Set(time.Since(begin).Seconds())
 	}(time.Now())
 
 	statusCodeData, err = mw.next.StatusCodes(platform) // hand request to logged service
