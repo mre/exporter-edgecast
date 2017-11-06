@@ -2,6 +2,8 @@ package main
 
 import (
 	// general
+	"errors"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -13,8 +15,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	// go-kit
-	"errors"
-	"fmt"
 	"github.com/go-kit/kit/log"
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 )

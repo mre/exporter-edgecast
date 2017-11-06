@@ -1,9 +1,10 @@
 package main
 
 import (
+	"sync"
+
 	"github.com/iwilltry42/edgecast"
 	"github.com/prometheus/client_golang/prometheus"
-	"sync"
 )
 
 // EdgecastInterface to be used for logging and instrumenting middleware
