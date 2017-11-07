@@ -17,8 +17,7 @@ lint: $(GOMETALINTER)
 	# recursevly run gometalinter on all files in this directory, skipping packages in vendor
 	gometalinter ./... --vendor --disable=gotype
 
-# build everything in this directory and sub-directories
-# TODO: work this out
+# build everything in this directory into a single binary in bin-directory
 .PHONY: build
 build:
 ifeq ($(OS),Windows_NT)
@@ -28,7 +27,6 @@ else
 endif
 
 # build docker image
-# TODO: enhance
 .PHONY: dockerbuild
 dockerbuild:
 ifeq ($(OS),Windows_NT)

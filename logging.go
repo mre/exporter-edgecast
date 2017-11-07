@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/go-kit/kit/log"
 	ec "github.com/iwilltry42/edgecast"
-	"time"
 )
 
 type loggingMiddleware struct {
@@ -22,7 +23,7 @@ func (mw loggingMiddleware) Bandwidth(platform int) (bandwidthData *ec.Bandwidth
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "Bandwidth",
 			"platform", fmt.Sprintf("%d(%s)", platform, Platforms[platform]),
-			"output", bandwidthData.Bps,
+			"output", fmt.Sprintf("%+v", bandwidthData),
 			"err", err,
 			"took", time.Since(begin),
 		)
