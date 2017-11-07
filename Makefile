@@ -27,8 +27,17 @@ build:
 # TODO: enhance
 .PHONY: dockerbuild
 dockerbuild:
+ifeq ($(OS),Windows_NT)
+	docker build -t test .
+else
 	sudo docker build -t test .
+endif
+
 
 .PHONY: dockerrun
 dockerrun:
+ifeq ($(OS),Windows_NT)
+	docker run -P --name test --rm test
+else
 	sudo docker run -P --name test --rm test
+endif
