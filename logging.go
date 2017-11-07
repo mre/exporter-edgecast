@@ -38,7 +38,7 @@ func (mw loggingMiddleware) Connections(platform int) (connectionData *ec.Connec
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "Connections",
 			"platform", fmt.Sprintf("%d(%s)", platform, Platforms[platform]),
-			"output", connectionData.Connections,
+			"output", fmt.Sprintf("%+v", connectionData),
 			"err", err,
 			"took", time.Since(begin),
 		)
@@ -53,7 +53,7 @@ func (mw loggingMiddleware) CacheStatus(platform int) (cacheStatusData *ec.Cache
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "CacheStatus",
 			"platform", fmt.Sprintf("%d(%s)", platform, Platforms[platform]),
-			"output", cacheStatusData,
+			"output", fmt.Sprintf("%+v", cacheStatusData),
 			"err", err,
 			"took", time.Since(begin),
 		)
@@ -68,7 +68,7 @@ func (mw loggingMiddleware) StatusCodes(platform int) (statusCodeData *ec.Status
 		_ = mw.logger.Log( // params: alternating key-value-key-value-...
 			"method", "StatusCodes",
 			"platform", fmt.Sprintf("%d(%s)", platform, Platforms[platform]),
-			"output", statusCodeData,
+			"output", fmt.Sprintf("%+v", statusCodeData),
 			"err", err,
 			"took", time.Since(begin),
 		)
