@@ -21,7 +21,11 @@ lint: $(GOMETALINTER)
 # TODO: work this out
 .PHONY: build
 build:
+ifeq ($(OS),Windows_NT)
+	go build -o bin/main.exe
+else
 	go build -o bin/main
+endif
 
 # build docker image
 # TODO: enhance
