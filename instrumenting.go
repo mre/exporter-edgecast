@@ -9,11 +9,19 @@ import (
 )
 
 type instrumentingMiddleware struct {
-	requestCount               metrics.Counter   // positive only counting value
+	requestCount               metrics.Counter   // positive/incrementing only value
 	requestLatencyDistribution metrics.Histogram // bucket sampling
-	requestLatency             metrics.Gauge
+	requestLatency             metrics.Gauge     // positive and negative counting value
 	next                       EdgecastInterface
 }
+
+/*
+ * instrumentingMiddleware wraps a given EdgecastInterface an creates metrics for its invoked functions
+ * The following metrics are created per function:
+ * - requestCount:					incremented on every invocation of that function
+ * - requestLatency:				time in seconds that function took from invocation to return
+ * - requestLatencyDistribution:	histogram distribution of all invocations so far including phi-quantiles, total, sum
+ */
 
 func (mw instrumentingMiddleware) Bandwidth(platform int) (bandwidthData *edgecast.BandwidthData, err error) {
 	defer func(begin time.Time) {

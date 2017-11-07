@@ -14,7 +14,12 @@ type loggingMiddleware struct {
 }
 
 /*
- * functions to implement EdgecastInterface
+ * loggingMiddleware wraps a given EdgecastInterface and logs its functions
+ * it logs information for the following keys:
+ * - method: 	the function that was called inside the given EdgecastInterface
+ * - output: 	the return data of that function
+ * - err:		the returned error-value of that function
+ * - took:		time in seconds that function needed from invocation to return
  */
 
 func (mw loggingMiddleware) Bandwidth(platform int) (bandwidthData *ec.BandwidthData, err error) {
