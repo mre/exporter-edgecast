@@ -27,19 +27,10 @@ else
 endif
 
 # build docker image
-.PHONY: dockerbuild
-dockerbuild:
+.PHONY: docker
+docker: build
 ifeq ($(OS),Windows_NT)
-	docker build -t test .
+	docker build -t trivago/monitoring:edgecast-v1 .
 else
-	sudo docker build -t test .
-endif
-
-
-.PHONY: dockerrun
-dockerrun:
-ifeq ($(OS),Windows_NT)
-	docker run -P --name test --rm test
-else
-	sudo docker run -P --name test --rm test
+	sudo docker build -t trivago/monitoring:edgecast-v1 .
 endif
