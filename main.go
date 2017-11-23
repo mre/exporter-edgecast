@@ -65,7 +65,7 @@ func main() {
 	// connect handlers
 	http.Handle("/metrics", promhttp.Handler())
 
-	// set up logger and start service on port 8090
-	_ = logger.Log("msg", "HTTP", "addr", ":8090")
-	_ = logger.Log("err", http.ListenAndServe(":8090", nil))
+	// set up logger and start service on port 80
+	_ = logger.Log("msg", "HTTP", "addr", ":80")
+	_ = logger.Log("err", http.ListenAndServe(":80", nil))
 }
