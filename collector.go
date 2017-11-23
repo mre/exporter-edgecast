@@ -36,7 +36,7 @@ var (
 
 	// Prepared Description of all fetchable metrics
 	bandwidth = prometheus.NewDesc(
-		prometheus.BuildFQName(NAMESPACE, "metrics", "bandwidth"), "Current amount of bandwidth usage per platform (Mbps).", []string{"platform"}, nil,
+		prometheus.BuildFQName(NAMESPACE, "metrics", "bandwidth_bps"), "Current amount of bandwidth usage per platform (bits per second).", []string{"platform"}, nil,
 	)
 	cachestatus = prometheus.NewDesc(
 		prometheus.BuildFQName(NAMESPACE, "metrics", "cachestatus"), "Breakdown of the cache statuses currently being returned for requests to CDN account.", []string{"platform", "CacheStatus"}, nil,

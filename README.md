@@ -5,7 +5,7 @@ Migrating a monolithic PHP application to Microservices written in Go
 ### What is this repository for? ###
 
 * Bachelor Thesis Project
-* 1.0.0
+* 2.0.0
 
 ### Package Management
 * This project uses ~~glide~~ **dep** as package manager
