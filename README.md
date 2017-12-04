@@ -1,6 +1,6 @@
 # README #
 
-Migrating a monolithic PHP application to Microservices written in Go
+## Edgecast-Collector
 
 ### What is this repository for? ###
 
@@ -8,21 +8,32 @@ Migrating a monolithic PHP application to Microservices written in Go
 * 2.0.0
 
 ### Package Management
-* This project uses ~~glide~~ **dep** as package manager
-* versions are tracked in ~~glide.lock~~ Gopkg.lock
-* glide settings are included in ~~glide.yaml~~ Gopkg.toml
-* ~~get glide here: https://glide.sh/~~
-* get dep here: https://github.com/golang/dep
+* This project uses **dep** as package manager
+* versions are tracked in Gopkg.lock
+* glide settings are included in Gopkg.toml
+* get dep here: [https://github.com/golang/dep](https://github.com/golang/dep)
 
-### make a call to serving microservice:
-- GET on http://localhost:8080/metrics
-- via Prometheus: prometheus -config-file=res/prometheus.yml
+### test
+- GET on [http://localhost:80/metrics](http://localhost:80/metrics)
+- via Prometheus from local directory: ```prometheus -config-file=prometheus.yml```
 
-# the res folder
-- contains useful information on files and packages
-- contains class/project/Entity-Relationship-Diagrams
-    + created with [go-erd](https://github.com/gmarik/go-erd, "https://github.com/gmarik/go-erd")
-    + ```go-erd -path . | dot -Tsvg > out.svg```
-- call graph created with [go-callvis](https://github.com/TrueFurby/go-callvis,"https://github.com/TrueFurby/go-callvis")
-    + ```go-callvis [OPTIONS] <main pkg> | dot -Tpng -o output.png```
-    + grouped by package using option ```-group pkg```
+### static analysis
+- from local directory: ```make lint``` (uses gometalinter, downloads and installs it in case of absence)
+
+### build
+- from local directory: ```make build``` (builds for Windows or Unix, after checking ```$(OS),Windows_NT```)
+
+### run
+- from local directory: ```./bin/main``` (Unix) or ```.\bin\main.exe``` (Windows)
+- via docker: 
+    + build docker image: ```make docker```
+    + run docker image: ```(sudo) docker run -P trivago/monitoring:edgecast-v1```
+    
+### view exposed metrics:
+- via Browser on the same machine: visit [http://localhost:80/metrics](http://localhost:80/metrics)
+    + via Browser on different machine: change "localhost" to endpoint address
+- via existing Prometheus server installation: 
+    + start new server locally using the provided configuration file:
+        * ```prometheus -config-file=prometheus.yml```
+        * view results here: [http://localhost:9090](http://localhost:9090)
+    + copy & paste job from provided prometheus.yml to running server's configuration to scrape the service metrics
