@@ -89,7 +89,9 @@ See information to all the possible metrics offered by the API in the [official 
         * error
 
 ### Queried Platforms:
-- 2:  "flash"
-- 3:  "http_large"
-- 8:  "http_small"
-- 14: "adn"
+| MediaTypeId | Platform                     | Naming     |
+|-------------|------------------------------|------------|
+| 2           | Flash Media Streaming        | flash      |
+| 3           | HTTP Large                   | http_large |
+| 8           | HTTP Small                   | http_small |
+| 14          | Application Delivery Network | adn        |
