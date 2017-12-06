@@ -29,7 +29,9 @@ EdgeCast CDN API and then transforms and exposes them to be scraped and displaye
 - `./bin/main` (Unix) or `.\bin\main.exe` (Windows)
 - via Docker:
     + build Docker image: `make docker`
-    + run Docker image: `(sudo) docker run -P trivago/monitoring:edgecast-v1`
+    + run Docker image: `(sudo) docker run -p=<some_free_port>:80 trivago/monitoring:edgecast-v1 -e "EDGECAST_TOKEN=<your_token>" -e "EDGECAST_ACCOUNTID=<your_id>"`
+        * NOTE: <some_free_port> must be the same as specified in the job-description in prometheus.yml
+
 
 ### View Exposed Metrics:
 - via Browser on the same machine: visit [http://localhost:80/metrics](http://localhost:80/metrics)
