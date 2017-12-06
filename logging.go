@@ -8,19 +8,18 @@ import (
 	ec "github.com/iwilltry42/edgecast"
 )
 
-type loggingMiddleware struct {
-	logger log.Logger
-	next   EdgecastInterface
-}
-
 /*
- * loggingMiddleware wraps a given EdgecastInterface and logs its functions
- * it logs information for the following keys:
+ * loggingMiddleware wraps a given EdgecastInterface and logs its functions.
+ * It logs information for the following keys:
  * - method: 	the function that was called inside the given EdgecastInterface
  * - output: 	the return data of that function
  * - err:		the returned error-value of that function
  * - took:		time in seconds that function needed from invocation to return
  */
+type loggingMiddleware struct {
+	logger log.Logger
+	next   EdgecastInterface
+}
 
 func (mw loggingMiddleware) Bandwidth(platform int) (bandwidthData *ec.BandwidthData, err error) {
 
