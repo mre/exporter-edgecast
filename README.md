@@ -41,6 +41,9 @@ EdgeCast CDN API and then transforms and exposes them to be scraped and displaye
     + copy & paste job from provided `prometheus.yml` to running server's configuration to scrape the service metrics
 
 ### Exposed Metrics
+
+See information to all the possible metrics offered by the API in the [official documentation](./docs/[Documentation]EdgeCast_Web_Services_REST_API.pdf).
+
 #### EdgeCast Metrics
 - `Edgecast_metrics_bandwidth_bps`
     + HELP:     Current amount of bandwidth usage per platform (bits per second)
