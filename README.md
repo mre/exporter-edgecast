@@ -95,3 +95,5 @@ See information to all the possible metrics offered by the API in the [official 
 | 3           | HTTP Large                   | http_large |
 | 8           | HTTP Small                   | http_small |
 | 14          | Application Delivery Network | adn        |
+
+**Note**: MediaTypeId 7, 9, 15 refer to SSL-Traffic only for the platforms 3, 8, 14 respectively (Docs page 467) and are not queried yet.
