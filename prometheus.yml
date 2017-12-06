@@ -1,3 +1,4 @@
+# NOTE: This is the default prometheus template file extended by a job scraping the edgecast_collector
 global:
   scrape_interval:     15s # By default, scrape targets every 15 seconds.
 
@@ -6,9 +7,8 @@ global:
   external_labels:
     monitor: 'codelab-monitor'
 
-# A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
 scrape_configs:
+  # scrape prometheus itself
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'prometheus'
 
@@ -18,7 +18,7 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  # try to scrape example service
+  # scrape metrics exposed by the edgecast collector
   - job_name: 'edgecast_collector'
 
     scrape_interval: 5s
