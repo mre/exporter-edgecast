@@ -39,3 +39,54 @@ EdgeCast CDN API and then transforms and exposes them to be scraped and displaye
         * ```prometheus -config-file=prometheus.yml```
         * view results here: [http://localhost:9090](http://localhost:9090)
     + copy & paste job from provided prometheus.yml to running server's configuration to scrape the service metrics
+
+### Exposed Metrics
+#### EdgeCast Metrics
+- Edgecast_metrics_bandwidth_bps
+    + HELP:     Current amount of bandwidth usage per platform (bits per second)
+    + TYPE:     GaugeValue
+    + Labels:
+        * platform=<http_small|http_large|adn|flash>
+- Edgecast_metrics_cachestatus
+    + HELP:     Breakdown of the cache statuses currently being returned for requests to CDN account.
+    + TYPE:     GaugeValue
+    + Labels:
+        * platform=<http_small|http_large|adn|flash>
+        * CacheStatus=<TCP_HIT|TCP_MISS|...>
+- Edgecast_metrics_connections
+    + HELP:     Total active connections per second per platform.
+    + TYPE:     GaugeValue
+    + Labels:
+        * platform=<http_small|http_large|adn|flash>
+- Edgecast_metrics_statuscodes
+    + HELP:     Breakdown of the HTTP status codes currently being returned for requests to CDN account.
+    + TYPE:     GaugeValue
+    + Labels:
+        * platform=<http_small|http_large|adn|flash>
+        * StatusCode=<2xx|3xx|404|...>
+
+#### Service Metrics
+- Edgecast_service_metrics_request_count
+    + HELP:     Number of requests received.
+    + TYPE:     CounterValue
+    + Labels:
+        * method
+        * error
+- Edgecast_service_metrics_request_latency_seconds
+    + HELP:     Duration of request in seconds.
+    + TYPE:     GaugeValue
+    + Labels:
+        * method
+        * error
+- Edgecast_service_metrics_request_latency_distribution_seconds
+    + HELP:     Total duration of requests in seconds.
+    + TYPE:     Summary
+    + Labels:
+        * method
+        * error
+
+### Queried Platforms:
+- 2:  "flash"
+- 3:  "http_large"
+- 8:  "http_small"
+- 14: "adn"
