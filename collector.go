@@ -50,8 +50,8 @@ var (
 )
 
 // NewEdgecastCollector constructs a new EdgecastCollector using a given edgecast-client that implements the EdgecastInterface
-func NewEdgecastCollector(edgecast2 *EdgecastInterface) *EdgecastCollector {
-	return &EdgecastCollector{ec: *edgecast2}
+func NewEdgecastCollector(client *EdgecastInterface) *EdgecastCollector {
+	return &EdgecastCollector{ec: *client}
 }
 
 // Describe describes all exported metrics
@@ -75,9 +75,7 @@ func (col EdgecastCollector) Collect(ch chan<- prometheus.Metric) {
 	collectWaitGroup.Wait()
 }
 
-/*
- * metrics() concurrently fetches all possible metric types for a given platform
- */
+// metrics() concurrently fetches all possible metric types for a given platform
 func (col EdgecastCollector) metrics(ch chan<- prometheus.Metric, collectWaitgroup *sync.WaitGroup, platform int) {
 	var metricsWaitGroup sync.WaitGroup
 	metricsWaitGroup.Add(4) // 4 goroutines per platform for the 4 possible metric types

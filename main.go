@@ -25,11 +25,15 @@ var (
 )
 
 func main() {
-	logger := log.NewLogfmtLogger(os.Stderr)
+
+	// check if account ID and token were properly specified using the environment variables
 	if len(accountID) == 0 || len(token) == 0 {
-		fmt.Println(errors.New("ERROR: empty Account-ID or Token!\n-> Please specify using environment variables EDGECAST_ACCOUNT_ID and EDGECAST_TOKEN"))
+		fmt.Println(errors.New("error: empty Account-ID or Token!\n-> Please specify using environment variables EDGECAST_ACCOUNT_ID and EDGECAST_TOKEN"))
 		os.Exit(1)
 	}
+
+	// create new logger on Stderr
+	logger := log.NewLogfmtLogger(os.Stderr)
 	_ = logger.Log("Account-ID", accountID, "Token", token)
 
 	// Prometheus metrics settings for this service
