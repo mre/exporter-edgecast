@@ -1,5 +1,3 @@
-# Makefile for Go-Project
-
 # dynamically fetch path to executables
 GO_BIN := $(GOPATH)/bin
 GOMETALINTER := $(GO_BIN)/gometalinter
@@ -12,7 +10,7 @@ $(GOMETALINTER):
 # fire up gometalinter to concurrently run several static analysis tools at once
 .PHONY: lint
 lint: $(GOMETALINTER)
-	# recursevly run gometalinter on all files in this directory, skipping packages in vendor
+	# recursively run gometalinter on all files in this directory, skipping packages in vendor
 	gometalinter ./... --vendor --disable=gotype
 
 # build everything in this directory into a single binary in bin-directory
