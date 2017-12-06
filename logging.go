@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/log"
-	ec "github.com/iwilltry42/edgecast"
+	ec "github.com/mre/edgecast"
 )
 
 /*

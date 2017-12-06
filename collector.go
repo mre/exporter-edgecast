@@ -3,7 +3,7 @@ package main
 import (
 	"sync"
 
-	"github.com/iwilltry42/edgecast"
+	"github.com/mre/edgecast"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

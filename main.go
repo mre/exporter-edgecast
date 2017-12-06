@@ -8,7 +8,7 @@ import (
 	"os"
 
 	// Edgecast Client
-	"github.com/iwilltry42/edgecast"
+	"github.com/mre/edgecast"
 
 	// Prometheus for logging/metrics
 	"github.com/prometheus/client_golang/prometheus"
