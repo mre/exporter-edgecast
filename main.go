@@ -8,7 +8,7 @@ import (
 	"os"
 
 	// Edgecast Client
-	"github.com/iwilltry42/edgecast"
+	"github.com/mre/edgecast"
 
 	// Prometheus for logging/metrics
 	"github.com/prometheus/client_golang/prometheus"
@@ -57,9 +57,11 @@ func main() {
 		Help:      "Duration of request in seconds.",
 	}, fieldKeys)
 
-	// create EdgecastClient that implements the interface and wrap it with logging and instrumenting middleware
+	// create EdgecastClient that communicates with the Edgecast API
 	var svc EdgecastInterface = edgecast.NewEdgecastClient(accountID, token)
-	svc = loggingMiddleware{logger, svc} // attach logger to service
+	// attach logger to service
+	svc = loggingMiddleware{logger, svc}
+	// attach instrumenting middleware
 	svc = instrumentingMiddleware{requestCount, requestLatency, requestGauge, svc}
 
 	// create the prometheus collector that uses the EdgecastClient and register it to prometheus

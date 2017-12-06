@@ -13,9 +13,13 @@ lint: $(GOMETALINTER)
 	# recursively run gometalinter on all files in this directory, skipping packages in vendor
 	gometalinter ./... --vendor --disable=gotype
 
+.PHONY: dependencies
+dependencies:
+	dep ensure
+
 # build everything in this directory into a single binary in bin-directory
 .PHONY: build
-build:
+build: dependencies
 ifeq ($(OS),Windows_NT)
 	go build -o bin/main.exe
 else

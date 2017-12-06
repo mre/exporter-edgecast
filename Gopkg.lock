@@ -33,12 +33,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/iwilltry42/edgecast"
-  packages = ["."]
-  revision = "ba5c57662123f1c7ea058234809299fc07b450d7"
-
-[[projects]]
-  branch = "master"
   name = "github.com/kr/logfmt"
   packages = ["."]
   revision = "b84e30acd515aadc4b783ad4ff83aff3299bdfe0"
@@ -48,6 +42,12 @@
   packages = ["pbutil"]
   revision = "3247c84500bff8d9fb6d579d800f20b3e091582c"
   version = "v1.0.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mre/edgecast"
+  packages = ["."]
+  revision = "d49b2471bf34caaa8cb38445996dc540a22fdd09"
 
 [[projects]]
   name = "github.com/prometheus/client_golang"
@@ -76,6 +76,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7460e2bee4c4be0eaaa73cd19df23d8f3f07c50948e3dd0d3e14072080fa9cc2"
+  inputs-digest = "f5e84a413685c71d4a31a5616149adb2fcac9550e1d41a18d48aabe70d65ceae"
   solver-name = "gps-cdcl"
   solver-version = 1
